@@ -2,14 +2,20 @@ package com.moreno.searchitunes.repositories;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
 
 import com.moreno.searchitunes.api.Api;
 import com.moreno.searchitunes.api.TrackApiClient;
+import com.moreno.searchitunes.api.responsemodel.TrackResponse;
 import com.moreno.searchitunes.models.Track;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TrackRepository {
 
@@ -40,7 +46,21 @@ public class TrackRepository {
     }
 
     public LiveData<List<Track>> getTracks(){
-        return trackList;
+        final MutableLiveData<List<Track>> tracks = new MutableLiveData<>();
+        Api.getTrackApi().getTracks().enqueue(new Callback<TrackResponse>() {
+            @Override
+            public void onResponse(Call<TrackResponse> call, Response<TrackResponse> response) {
+                tracks.setValue(response.body().getTracks());
+            }
+
+            @Override
+            public void onFailure(Call<TrackResponse> call, Throwable t) {
+
+            }
+        });
+        return tracks;
     }
+
+
 
 }
