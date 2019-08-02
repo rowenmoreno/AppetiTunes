@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.moreno.searchitunes.api.Api;
 import com.moreno.searchitunes.api.TrackApiClient;
-import com.moreno.searchitunes.api.responsemodel.TrackResponse;
+import com.moreno.searchitunes.api.responsemodel.TrackListResponse;
 import com.moreno.searchitunes.models.Track;
 
 import java.util.List;
@@ -47,14 +47,14 @@ public class TrackRepository {
 
     public LiveData<List<Track>> getTracks(){
         final MutableLiveData<List<Track>> tracks = new MutableLiveData<>();
-        Api.getTrackApi().getTracks().enqueue(new Callback<TrackResponse>() {
+        Api.getTrackApi().getTracks("star","au", "movie").enqueue(new Callback<TrackListResponse>() {
             @Override
-            public void onResponse(Call<TrackResponse> call, Response<TrackResponse> response) {
+            public void onResponse(Call<TrackListResponse> call, Response<TrackListResponse> response) {
                 tracks.setValue(response.body().getTracks());
             }
 
             @Override
-            public void onFailure(Call<TrackResponse> call, Throwable t) {
+            public void onFailure(Call<TrackListResponse> call, Throwable t) {
 
             }
         });
