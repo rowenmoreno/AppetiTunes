@@ -5,15 +5,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
 
+    private static Retrofit retrofit;
+
     private static String BASE_URL = "https://itunes.apple.com/";
 
-    private static TrackApi trackApi = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(TrackApi.class);
-
     public static TrackApi getTrackApi(){
-        return trackApi;
+        if (retrofit == null){
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofit.create(TrackApi.class);
     }
 }
